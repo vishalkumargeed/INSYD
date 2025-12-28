@@ -26,6 +26,7 @@ export default function SigninButton() {
   return (
     <Button 
       onClick={() => signIn("google", { callbackUrl: "/form" })} 
+      size="lg"
       className="w-full sm:w-auto"
     >
       Sign In with Google
