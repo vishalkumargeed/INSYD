@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import RoleSelectionForm from "../components/Form";
 import { Loader } from "@/components/ui/loader";
 
-export default function FormRoute () { 
+export default function FormRoute() { 
     const router = useRouter();
     const { data: session, status } = useSession();
     const [isChecking, setIsChecking] = useState(true);
@@ -50,7 +50,6 @@ export default function FormRoute () {
             });
 
             const data = await response.json();
-            console.log("response after entering data:", data);
             
             if (response.ok) {
                 router.push("/dashboard");

@@ -17,7 +17,7 @@ interface Product {
   createdAt: string;
 }
   
-export function ProdcutsTable({ refreshKey }: { refreshKey?: number }) {
+export function ProductsTable({ refreshKey }: { refreshKey?: number }) {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,9 +37,8 @@ export function ProdcutsTable({ refreshKey }: { refreshKey?: number }) {
         }
         
         const data = await response.json();
-        console.log("data is:", data);
         
-        // The API returns { products: [...] }, so we need to extract the array
+        // Extract products array from API response
         if (data.products && Array.isArray(data.products)) {
           setProducts(data.products);
         } else {

@@ -1,2 +1,3 @@
-There are couple of ui changes I need to make : 
-1. Make sure to make the website mobile responsive ! 
+Do one thing : 
+1. make the "/" page more good looking and attractive ! 
+2. also check all the code and make sure that all the code should looking like it's beein written by an intern 

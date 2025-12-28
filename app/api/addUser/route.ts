@@ -12,8 +12,7 @@ export async function POST(req: NextRequest) {
         if (!session || !session.user?.email) {
             return NextResponse.json(
                 {
-                    message: "user is not authenticated!",
-                    status: 401
+                    message: "User is not authenticated",
                 },
                 { status: 401 }
             );
@@ -23,17 +22,12 @@ export async function POST(req: NextRequest) {
             return NextResponse.json(
                 {
                     message: "Invalid role. Role must be 'manufacturer' or 'store'",
-                    status: 400
                 },
                 { status: 400 }
             );
         }
 
-        console.log("inside the api route!");
-        console.log("Session user:", session.user);
-        console.log("Body role:", body.role);
-
-        // checking if the user is already present or not!
+        // Check if the user already exists
         const alreadyUser = await prisma.user.findUnique({
             where: {
                 email: session.user.email
@@ -41,7 +35,6 @@ export async function POST(req: NextRequest) {
         });
 
         if (!alreadyUser) {
-            // we need to push the data into the postgres using prisma orm
             const user = await prisma.user.create({
                 data: {
                     name: session.user.name || null,
@@ -50,18 +43,14 @@ export async function POST(req: NextRequest) {
                 }
             });
             
-            console.log("user created response:", user);
             return NextResponse.json(
                 {
-                    message: "user authenticated and created into the database",
+                    message: "User authenticated and created successfully",
                     user: user,
-                    data: session.user.name,
-                    status: 201
                 },
                 { status: 201 }
             );
         } else {
-            console.log("user already exists!");
             // Update user name if it's missing but available in session
             if (!alreadyUser.name && session.user.name) {
                 const updatedUser = await prisma.user.update({
@@ -70,18 +59,16 @@ export async function POST(req: NextRequest) {
                 });
                 return NextResponse.json(
                     {
-                        message: "user already exists, name updated",
+                        message: "User already exists, name updated",
                         user: updatedUser,
-                        status: 200
                     },
                     { status: 200 }
                 );
             }
             return NextResponse.json(
                 {
-                    message: "user already exists",
+                    message: "User already exists",
                     user: alreadyUser,
-                    status: 200
                 },
                 { status: 200 }
             );

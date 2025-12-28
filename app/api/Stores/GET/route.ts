@@ -54,7 +54,10 @@ export async function GET(req: NextRequest) {
     } catch (error) {
         console.error("Error fetching store:", error);
         return NextResponse.json(
-            { error: "Internal Server Error" },
+            { 
+                error: error instanceof Error ? error.message : "Internal Server Error",
+                message: "Error fetching stores"
+            },
             { status: 500 }
         );
     }

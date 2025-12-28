@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { signOut, useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import { ProdcutsTable } from "../components/table";
+import { ProductsTable } from "../components/table";
 import { InventoryTable } from "../components/inventory-table";
 import { StoresList } from "../components/stores-list";
 import {
@@ -83,7 +83,7 @@ export default function Dashboard() {
       const data = await response.json();
 
       if (response.ok) {
-        setProductMessage({ type: 'success', text: data.messaGE || data.message || 'Product added successfully!' });
+        setProductMessage({ type: 'success', text: data.message || 'Product added successfully!' });
         setProductName("");
         setRefreshKey(prev => prev + 1);
         const productsResponse = await fetch("/api/Products/GET");
@@ -331,7 +331,7 @@ export default function Dashboard() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ProdcutsTable refreshKey={refreshKey} />
+                  <ProductsTable refreshKey={refreshKey} />
                 </CardContent>
               </Card>
 

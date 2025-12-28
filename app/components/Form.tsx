@@ -13,15 +13,13 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 
 export default function RoleSelectionForm({
   onSubmit,
 }: {
   onSubmit: (role: "manufacturer" | "store") => void;
 }) {
-
-    const { data : session } = useSession()
+  const { data: session } = useSession();
   const [role, setRole] = useState<"manufacturer" | "store" | "">("manufacturer");
 
   return (

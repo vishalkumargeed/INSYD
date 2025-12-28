@@ -14,7 +14,6 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // if the user is a manufacturer then he can add the products
         const session = await getServerSession(authOptions);
         
         if (!session?.user?.email) {
@@ -25,31 +24,27 @@ export async function POST(req: NextRequest) {
         }
 
         const email = session.user.email;
-        // then we need to check if the user is a manufacturer or not! 
-        const roleResponse = await prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
             where: {
                 email: email
             }
-        }) 
+        });
 
-        if(roleResponse?.role === "manufacturer") {
-        
-            // then we need to add the products 
-            const addProductResponse = await prisma.product.create({
-                data : {
-                    name : body?.name
+        if (user?.role === "manufacturer") {
+            const product = await prisma.product.create({
+                data: {
+                    name: body.name.trim()
                 }
-            })
+            });
 
-            console.log("addProductResponse is: " , addProductResponse );
-            return NextResponse.json ({
-                "messaGE ": "product added successfully ! ",
-                "product": addProductResponse
-            }, { status: 201 }) 
-        } else { 
-            return NextResponse.json ({
-                "message" : "user is not manufacturer"
-            }, { status: 403 })
+            return NextResponse.json({
+                message: "Product added successfully",
+                product: product
+            }, { status: 201 });
+        } else {
+            return NextResponse.json({
+                message: "Only manufacturers can add products"
+            }, { status: 403 });
         }
    } catch (error) {
         console.error("Error in add product API:", error);
