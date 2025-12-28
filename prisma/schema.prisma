@@ -16,51 +16,51 @@ enum Role {
   manufacturer
   store
 }
-// model for each user 
 model User {
   id            String   @id @default(cuid())
   email         String   @unique
   name          String?
   role          Role
   storeId       String?
-  store         Store?   @relation(fields: [storeId], references: [id])
+  store         Store?   @relation("StoreUsers", fields: [storeId], references: [id])
+  manufacturerStores Store[] @relation("ManufacturerStores")
+
   createdAt     DateTime @default(now())
 }
 
-
-// model for each store 
-model Store {
-  id          String           @id @default(cuid())
-  name        String
-  users       User[]
-  inventory   StoreInventory[]
-  createdAt  DateTime         @default(now())
-}
-
-// model for each product 
 model Product {
   id          String           @id @default(cuid())
   name        String           @unique
   inventory   StoreInventory[]
+
   createdAt  DateTime         @default(now())
 }
 
+model Store {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  manufacturerId String
+  manufacturer  User     @relation("ManufacturerStores", fields: [manufacturerId], references: [id])
+  users         User[]   @relation("StoreUsers")
+  inventory     StoreInventory[]
 
-// model for store inventory 
+  createdAt     DateTime @default(now())
+}
+
 model StoreInventory {
-  id               String   @id @default(cuid())
-  storeId          String
-  productId        String
-  initialQuantity  Int
-  currentQuantity  Int
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id              String   @id @default(cuid())
+  storeId         String
+  productId       String
+  initialQuantity Int
+  currentQuantity Int
+  store           Store    @relation(fields: [storeId], references: [id])
+  product         Product  @relation(fields: [productId], references: [id])
 
-  store   Store   @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@unique([storeId, productId])
-  @@index([storeId])
-  @@index([productId])
 }
+
 

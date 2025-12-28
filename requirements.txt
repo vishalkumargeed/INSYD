@@ -1,0 +1,12 @@
+here are the requirements for the project:
+1. now the manufacturer can add the create a paticular store in from the dashboard page. 
+while creating the store , the manufacturer needs to enter the name of the store and the email of the store owner.
+the email of the store owner can only access that store only not else ! 
+2. now the store owner can add the products into the store inventory  from the dashboard page. 
+Note that : 
+- for each store user , the stope is different so this means that we need to fetch the store with respect to the session email id ! 
+-3. in Store Dashboard Page ,  the store owner can see the products ,  decrease the quantity of the product. 
+
+Note : check the prisma schema for this adn act accordingly ! 
+maintain the ui of the dashboard as it is 
+don't put comments in the codebase and maintain write the code in such a way that it looks a like that it's been written by a sde intern 
