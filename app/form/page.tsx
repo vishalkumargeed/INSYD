@@ -4,6 +4,8 @@ import RoleSelectionForm from "../components/Form";
 
 export default function FormRoute () { 
     const router = useRouter()
+  
+
  async function handleSubmit(role: "manufacturer" | "store") {
     try {
       const response = await fetch("/api/addUser", {

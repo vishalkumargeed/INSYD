@@ -76,7 +76,11 @@ export default function RoleSelectionForm({
     <Button
       className="w-full"
       disabled={!role}
-      onClick={() => onSubmit(role)}
+      onClick={() => {
+        if (role === "manufacturer" || role === "store") {
+          onSubmit(role);
+        }
+      }}
     >
       Continue
     </Button>
