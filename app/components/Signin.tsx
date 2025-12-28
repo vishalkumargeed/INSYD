@@ -23,7 +23,7 @@ export default function SigninButton (){
   return (
     <Button onClick={() => signIn("google",
         {
-        callbackUrl:"/dashboard"
+        callbackUrl:"/form"
        }
     )} > 
       Sign In with Google
