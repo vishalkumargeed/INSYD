@@ -1,3 +1,17 @@
-Do one thing : 
-1. make the "/" page more good looking and attractive ! 
-2. also check all the code and make sure that all the code should looking like it's beein written by an intern 
+Background
+Most Indian material businesses have no visibility over their inventory levels. This leads to low net
+margins (because of dead inventory, stocking poor-performing SKUs, damaged inventory etc.) and low
+confidence in their ability to scale their operations.
+Part 1: Problem solving document
+Problem-solve for a business facing inventory issues. Think about how tech can solve problems here,
+but keep in mind that not all problems need tech.
+Deliverables
+A document not exceeding 2 pages in length explaining your solutions to the problem. Use diagrams
+and tables if necessary.
+Part 2: Implementation
+Implement a system which can fix one or more solutions you mentioned above in NextJS + ExpressJS
+stack. Your solution should solve the problem in a meaningful manner. If you get stuck or have any
+doubts, make assumptions and mention them along with your submission.
+Deliverables
+1. Links to Github repositories
+2. A deployed app on a platform of your choice
