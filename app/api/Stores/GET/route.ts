@@ -28,7 +28,14 @@ export async function GET(req: NextRequest) {
 
         if (user.role === "manufacturer") {
             const stores = await prisma.store.findMany({
-                where: { manufacturerId: user.id }
+                where: { manufacturerId: user.id },
+                include: {
+                    inventory: {
+                        include: {
+                            product: true
+                        }
+                    }
+                }
             });
             return NextResponse.json({ stores }, { status: 200 });
         }

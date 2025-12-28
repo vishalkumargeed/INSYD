@@ -4,6 +4,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { ProdcutsTable } from "../components/table";
 import { InventoryTable } from "../components/inventory-table";
+import { StoresList } from "../components/stores-list";
 import {
   Card,
   CardContent,
@@ -127,6 +128,7 @@ export default function Dashboard() {
         setMessage({ type: 'success', text: data.message || 'Store created successfully!' });
         setStoreName("");
         setStoreOwnerEmail("");
+        setRefreshKey(prev => prev + 1);
       } else {
         setMessage({ type: 'error', text: data.message || 'Failed to create store' });
       }
@@ -308,7 +310,7 @@ export default function Dashboard() {
               </Card>
             </div>
 
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 space-y-6">
               <Card>
                 <CardHeader>
                   <CardTitle>Products</CardTitle>
@@ -318,6 +320,18 @@ export default function Dashboard() {
                 </CardHeader>
                 <CardContent>
                   <ProdcutsTable refreshKey={refreshKey} />
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Stores & Inventory</CardTitle>
+                  <CardDescription>
+                    View all stores and their inventory
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <StoresList refreshKey={refreshKey} />
                 </CardContent>
               </Card>
             </div>
