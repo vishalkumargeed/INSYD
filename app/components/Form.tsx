@@ -25,27 +25,25 @@ export default function RoleSelectionForm({
   const [role, setRole] = useState<"manufacturer" | "store" | "">("manufacturer");
 
   return (
-   <Card className="max-w-md mx-auto">
+   <Card className="w-full max-w-md mx-auto">
   <CardHeader>
-    <CardTitle>Select your role</CardTitle>
-    <CardDescription>
+    <CardTitle className="text-xl sm:text-2xl">Select your role</CardTitle>
+    <CardDescription className="text-sm">
       This choice cannot be changed later.
     </CardDescription>
   </CardHeader>
 
   <CardContent className="space-y-6">
     {/* User Info */}
-    <div className="rounded-md border p-4 text-sm space-y-1">
-      <div className="flex justify-between">
-        <span className="text-muted-foreground">Name</span>
-        <span className="font-medium">{session?.user?.name}</span>
+    <div className="rounded-base border-2 border-border p-3 sm:p-4 text-sm space-y-2 shadow-shadow bg-secondary-background">
+      <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
+        <span className="text-muted-foreground font-base">Name</span>
+        <span className="font-heading break-word">{session?.user?.name}</span>
       </div>
-      <div className="flex justify-between">
-        <span className="text-muted-foreground">Email</span>
-        <span className="font-medium">{session?.user?.email}</span>
+      <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
+        <span className="text-muted-foreground font-base">Email</span>
+        <span className="font-heading break-all text-xs sm:text-sm">{session?.user?.email}</span>
       </div>
-     
-      
     </div>
 
     {/* Role Selection */}
@@ -56,16 +54,16 @@ export default function RoleSelectionForm({
       }
       className="space-y-4"
     >
-      <div className="flex items-center space-x-3 rounded-md border p-3">
+      <div className="flex items-center space-x-3 rounded-base border-2 border-border p-3 sm:p-4 shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none transition-all cursor-pointer">
         <RadioGroupItem value="manufacturer" id="manufacturer" />
-        <Label htmlFor="manufacturer" className="cursor-pointer">
+        <Label htmlFor="manufacturer" className="cursor-pointer font-base text-sm sm:text-base">
           Manufacturer
         </Label>
       </div>
 
-      <div className="flex items-center space-x-3 rounded-md border p-3">
+      <div className="flex items-center space-x-3 rounded-base border-2 border-border p-3 sm:p-4 shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none transition-all cursor-pointer">
         <RadioGroupItem value="store" id="store" />
-        <Label htmlFor="store" className="cursor-pointer">
+        <Label htmlFor="store" className="cursor-pointer font-base text-sm sm:text-base">
           Store
         </Label>
       </div>

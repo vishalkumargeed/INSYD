@@ -4,10 +4,10 @@ import SigninButton from "./components/Signin";
 
 export default function Home() {
   return (
-   <div className="flex justify-center items-center h-screen">
-   
-     <SigninButton/>
-     
+   <div className="flex justify-center items-center min-h-screen bg-background p-4">
+     <div className="w-full max-w-md">
+       <SigninButton/>
+     </div>
    </div>
   );
 }

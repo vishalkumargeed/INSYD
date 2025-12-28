@@ -1,10 +1,2 @@
-COuple of changes ! 
-
-1. when clicking on the button "Add Product" ,  it also refereshes the "Create Store" button and shows the alert into the Create store Card ! 
-
-2. TFor manufacturer , under each store card , there should be section where it shows which items are consuming fast and which are overstocked and which are of medium flow use ! 
-
-
-Note : check the prisma schema for this adn act accordingly ! 
-maintain the ui of the dashboard as it is 
-don't put comments in the codebase and maintain write the code in such a way that it looks a like that it's been written by a sde intern 
+There are couple of ui changes I need to make : 
+1. Make sure to make the website mobile responsive ! 

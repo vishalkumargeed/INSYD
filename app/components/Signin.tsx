@@ -9,23 +9,24 @@ export default function SigninButton (){
 
   if (session && session.user) {
     return (
-      <div className="flex gap-4 ">
-        <p className="text-sky-600">{session.user.name}</p>
-        <button onClick={() => signOut()} className="text-red-600">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center">
+        <p className="text-foreground font-base text-sm sm:text-base text-center sm:text-left">{session.user.name}</p>
+        <Button variant="outline" onClick={() => signOut()} className="w-full sm:w-auto">
           Sign Out
-        </button>
+        </Button>
       </div>
-
-      
     );
   }
 
   return (
-    <Button onClick={() => signIn("google",
+    <Button 
+      onClick={() => signIn("google",
         {
         callbackUrl:"/form"
        }
-    )} > 
+    )} 
+    className="w-full sm:w-auto"
+    > 
       Sign In with Google
    </Button>
   );

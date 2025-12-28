@@ -62,6 +62,21 @@ export async function POST(req: NextRequest) {
             );
         } else {
             console.log("user already exists!");
+            // Update user name if it's missing but available in session
+            if (!alreadyUser.name && session.user.name) {
+                const updatedUser = await prisma.user.update({
+                    where: { email: session.user.email },
+                    data: { name: session.user.name }
+                });
+                return NextResponse.json(
+                    {
+                        message: "user already exists, name updated",
+                        user: updatedUser,
+                        status: 200
+                    },
+                    { status: 200 }
+                );
+            }
             return NextResponse.json(
                 {
                     message: "user already exists",

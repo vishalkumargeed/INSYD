@@ -14,6 +14,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Loader } from "@/components/ui/loader";
 
 export default function Dashboard() {
   const { data: session } = useSession();
@@ -25,7 +27,9 @@ export default function Dashboard() {
   const [productQuantity, setProductQuantity] = useState("");
   const [products, setProducts] = useState<{ id: string; name: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [productMessage, setProductMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [storeMessage, setStoreMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [inventoryMessage, setInventoryMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
@@ -62,12 +66,12 @@ export default function Dashboard() {
 
   async function addProduct() {
     if (!productName.trim()) {
-      setMessage({ type: 'error', text: 'Please enter a product name' });
+      setProductMessage({ type: 'error', text: 'Please enter a product name' });
       return;
     }
 
     setIsLoading(true);
-    setMessage(null);
+    setProductMessage(null);
 
     try {
       const response = await fetch("/api/Products/add", {
@@ -79,7 +83,7 @@ export default function Dashboard() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage({ type: 'success', text: data.messaGE || data.message || 'Product added successfully!' });
+        setProductMessage({ type: 'success', text: data.messaGE || data.message || 'Product added successfully!' });
         setProductName("");
         setRefreshKey(prev => prev + 1);
         const productsResponse = await fetch("/api/Products/GET");
@@ -88,11 +92,11 @@ export default function Dashboard() {
           setProducts(productsData.products || []);
         }
       } else {
-        setMessage({ type: 'error', text: data.message || 'Failed to add product' });
+        setProductMessage({ type: 'error', text: data.message || 'Failed to add product' });
       }
     } catch (error) {
       console.error("Error adding product:", error);
-      setMessage({ type: 'error', text: 'Network error. Please try again.' });
+      setProductMessage({ type: 'error', text: 'Network error. Please try again.' });
     } finally {
       setIsLoading(false);
     }
@@ -100,17 +104,17 @@ export default function Dashboard() {
 
   async function createStore() {
     if (!storeName.trim()) {
-      setMessage({ type: 'error', text: 'Please enter a store name' });
+      setStoreMessage({ type: 'error', text: 'Please enter a store name' });
       return;
     }
 
     if (!storeOwnerEmail.trim()) {
-      setMessage({ type: 'error', text: 'Please enter store owner email' });
+      setStoreMessage({ type: 'error', text: 'Please enter store owner email' });
       return;
     }
 
     setIsLoading(true);
-    setMessage(null);
+    setStoreMessage(null);
 
     try {
       const response = await fetch("/api/Stores/create", {
@@ -125,16 +129,16 @@ export default function Dashboard() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage({ type: 'success', text: data.message || 'Store created successfully!' });
+        setStoreMessage({ type: 'success', text: data.message || 'Store created successfully!' });
         setStoreName("");
         setStoreOwnerEmail("");
         setRefreshKey(prev => prev + 1);
       } else {
-        setMessage({ type: 'error', text: data.message || 'Failed to create store' });
+        setStoreMessage({ type: 'error', text: data.message || 'Failed to create store' });
       }
     } catch (error) {
       console.error("Error creating store:", error);
-      setMessage({ type: 'error', text: 'Network error. Please try again.' });
+      setStoreMessage({ type: 'error', text: 'Network error. Please try again.' });
     } finally {
       setIsLoading(false);
     }
@@ -142,17 +146,17 @@ export default function Dashboard() {
 
   async function addToInventory() {
     if (!selectedProductId) {
-      setMessage({ type: 'error', text: 'Please select a product' });
+      setInventoryMessage({ type: 'error', text: 'Please select a product' });
       return;
     }
 
     if (!productQuantity || parseInt(productQuantity) <= 0) {
-      setMessage({ type: 'error', text: 'Please enter a valid quantity' });
+      setInventoryMessage({ type: 'error', text: 'Please enter a valid quantity' });
       return;
     }
 
     setIsLoading(true);
-    setMessage(null);
+    setInventoryMessage(null);
 
     try {
       const response = await fetch("/api/Stores/inventory/add", {
@@ -167,16 +171,16 @@ export default function Dashboard() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage({ type: 'success', text: data.message || 'Product added to inventory successfully!' });
+        setInventoryMessage({ type: 'success', text: data.message || 'Product added to inventory successfully!' });
         setSelectedProductId("");
         setProductQuantity("");
         setRefreshKey(prev => prev + 1);
       } else {
-        setMessage({ type: 'error', text: data.message || 'Failed to add product to inventory' });
+        setInventoryMessage({ type: 'error', text: data.message || 'Failed to add product to inventory' });
       }
     } catch (error) {
       console.error("Error adding to inventory:", error);
-      setMessage({ type: 'error', text: 'Network error. Please try again.' });
+      setInventoryMessage({ type: 'error', text: 'Network error. Please try again.' });
     } finally {
       setIsLoading(false);
     }
@@ -184,39 +188,39 @@ export default function Dashboard() {
 
   if (userRole === null) {
     return (
-      <div className="min-h-screen from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-            Loading...
-          </div>
+      <div className="min-h-screen bg-background p-6 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader size="lg" />
+          <p className="text-muted-foreground font-base">Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="flex justify-between items-center">
+    <div className="min-h-screen bg-background p-3 sm:p-4 md:p-6">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading text-foreground">
               Welcome, {session?.user?.name}
             </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
+            <p className="text-muted-foreground mt-1 sm:mt-2 text-sm sm:text-base font-base">
               {userRole === "manufacturer" ? "Manage your products and stores" : "Manage your store inventory"}
             </p>
           </div>
           <Button 
             variant="destructive" 
             onClick={() => signOut({ callbackUrl: "/" })}
+            className="w-full sm:w-auto"
           >
             Sign Out
           </Button>
         </div>
 
         {userRole === "manufacturer" ? (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-1">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div className="lg:col-span-1 space-y-4 sm:space-y-6">
               <Card>
                 <CardHeader>
                   <CardTitle>Create Store</CardTitle>
@@ -227,37 +231,35 @@ export default function Dashboard() {
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="store-name">Store Name</Label>
-                    <input
+                    <Input
                       id="store-name"
                       type="text"
                       value={storeName}
                       onChange={(e) => setStoreName(e.target.value)}
                       placeholder="Enter store name..."
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       disabled={isLoading}
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="store-owner-email">Store Owner Email</Label>
-                    <input
+                    <Input
                       id="store-owner-email"
                       type="email"
                       value={storeOwnerEmail}
                       onChange={(e) => setStoreOwnerEmail(e.target.value)}
                       placeholder="Enter store owner email..."
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       disabled={isLoading}
                     />
                   </div>
-                  {message && (
+                  {storeMessage && (
                     <div
-                      className={`p-3 rounded-md text-sm ${
-                        message.type === 'success'
-                          ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300'
-                          : 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300'
+                      className={`p-4 rounded-base border-2 border-border shadow-shadow text-sm font-base ${
+                        storeMessage.type === 'success'
+                          ? 'bg-chart-1/20 text-foreground border-chart-1'
+                          : 'bg-destructive/20 text-destructive-foreground border-destructive'
                       }`}
                     >
-                      {message.text}
+                      {storeMessage.text}
                     </div>
                   )}
                 </CardContent>
@@ -272,7 +274,7 @@ export default function Dashboard() {
                 </CardFooter>
               </Card>
 
-              <Card className="mt-6">
+              <Card>
                 <CardHeader>
                   <CardTitle>Add New Product</CardTitle>
                   <CardDescription>
@@ -282,7 +284,7 @@ export default function Dashboard() {
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="product-name">Product Name</Label>
-                    <input
+                    <Input
                       id="product-name"
                       type="text"
                       value={productName}
@@ -293,10 +295,20 @@ export default function Dashboard() {
                         }
                       }}
                       placeholder="Enter product name..."
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       disabled={isLoading}
                     />
                   </div>
+                  {productMessage && (
+                    <div
+                      className={`p-4 rounded-base border-2 border-border shadow-shadow text-sm font-base ${
+                        productMessage.type === 'success'
+                          ? 'bg-chart-1/20 text-foreground border-chart-1'
+                          : 'bg-destructive/20 text-destructive-foreground border-destructive'
+                      }`}
+                    >
+                      {productMessage.text}
+                    </div>
+                  )}
                 </CardContent>
                 <CardFooter>
                   <Button
@@ -310,7 +322,7 @@ export default function Dashboard() {
               </Card>
             </div>
 
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 space-y-4 sm:space-y-6">
               <Card>
                 <CardHeader>
                   <CardTitle>Products</CardTitle>
@@ -337,7 +349,7 @@ export default function Dashboard() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             <div className="lg:col-span-1">
               <Card>
                 <CardHeader>
@@ -353,7 +365,7 @@ export default function Dashboard() {
                       id="product-select"
                       value={selectedProductId}
                       onChange={(e) => setSelectedProductId(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full h-10 px-3 py-2 border-2 border-border rounded-base bg-background text-foreground font-base shadow-shadow focus:outline-none focus:ring-2 focus:ring-border focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none"
                       disabled={isLoading}
                     >
                       <option value="">Select a product</option>
@@ -366,26 +378,25 @@ export default function Dashboard() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="quantity">Quantity</Label>
-                    <input
+                    <Input
                       id="quantity"
                       type="number"
                       min="1"
                       value={productQuantity}
                       onChange={(e) => setProductQuantity(e.target.value)}
                       placeholder="Enter quantity..."
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       disabled={isLoading}
                     />
                   </div>
-                  {message && (
+                  {inventoryMessage && (
                     <div
-                      className={`p-3 rounded-md text-sm ${
-                        message.type === 'success'
-                          ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300'
-                          : 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300'
+                      className={`p-4 rounded-base border-2 border-border shadow-shadow text-sm font-base ${
+                        inventoryMessage.type === 'success'
+                          ? 'bg-chart-1/20 text-foreground border-chart-1'
+                          : 'bg-destructive/20 text-destructive-foreground border-destructive'
                       }`}
                     >
-                      {message.text}
+                      {inventoryMessage.text}
                     </div>
                   )}
                 </CardContent>
